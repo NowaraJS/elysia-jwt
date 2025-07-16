@@ -1,0 +1,1 @@
+export type { ElysiaJWTOptions as JWTOptions } from './elysiaJwtOptions';

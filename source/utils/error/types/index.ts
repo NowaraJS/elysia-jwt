@@ -1,0 +1,1 @@
+export type { ElysiaJwtPluginErrorOptions as CoreErrorOptions } from './elysiaJwtPluginErrorOptions';
