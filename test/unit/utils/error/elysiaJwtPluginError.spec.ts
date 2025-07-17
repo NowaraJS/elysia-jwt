@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test';
 
-import { ElysiaJwtPluginError } from '#/utils/error/elysiaJwtPluginError';
+import { ElysiaJwtPluginError } from '#/error/elysiaJwtPluginError';
 
 describe('ElysiaJwtPluginError', () => {
 	describe('constructor', () => {
