@@ -1,143 +1,175 @@
-# Prepare your package :
-
-## 1. Add in your repository environment variables and deploy keys:
-
-### 1.1 Prerequisites
-
-#### 1.1.1 SSH
-Generated SSH key with `ssh-keygen -t ed25519 -C "your_mail@domain.ext" -f your_package_name`
-
-- Get the public key with:
-  ```bash
-  cat your_package_name.pub
-  ```
-  You will get an output like this:
-  ```
-  ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC ...
-  ```
-
-- Get the private key with:
-  ```bash
-  cat your_package_name
-  ```
-  You will get an output like this:
-  ```
-  -----BEGIN OPENSSH PRIVATE KEY-----
-  ...
-  -----END OPENSSH PRIVATE KEY-----
-  ```
-
-#### 1.1.2 GPG **(You can reuse your existing GPG key if you have one for you account)**
-
-- Generate a GPG key with `gpg --full-generate-key` and follow the prompts to create a key suitable for signing commits and tags **whithout passphrase**.
-
-- Get the public key with:
-  ```bash
-    gpg --armor --export your_email@domain.ext
-  ```
-  
-  You will get an output like this:
-  ```
-  -----BEGIN PGP PUBLIC KEY BLOCK-----
-  ...
-  -----END PGP PUBLIC KEY BLOCK-----
-  ```
-  And then copy the output and put in yourh github account settings -> SSH and GPG keys -> New GPG key.
-
-- Get the private key (for github-action) with:
-  ```bash
-  gpg --armor --export-secret-keys your_email@domain.ext
-  ```
-  You will get an output like this:
-  ```
-  -----BEGIN PGP PRIVATE KEY BLOCK-----
-  ...
-  -----END PGP PRIVATE KEY BLOCK-----
-  ```
-
-### 1.2 Deploy keys
-Create a deploy key in your repository example `SSH_KEY` and put the public key generated in step [1.1.1](#111-ssh).
-
-### 1.3 Environment variables
-
-All environment variables are used in the workflow!
-
-Add the following environment variables to your repository settings:
-
-- `KEY_SSH`: The private SSH key for accessing the repository. (Generated in step [1.1.1](#111-ssh))
-- `KEY_GPG`: The GPG private key for signing commits and tags for git (Generated in step [1.1.2](#112-gpg))
-- `GIT_EMAIL`: Your email address associated with the GPG key.
-- `NPM_TOKEN`: Your npm token for publishing packages.
-
-## 2 Configure your repository
-- Add Ruleset for `main` and `develop` branches.
-- Add tag `need-triage` for issues.
-- Add your settings..
-
-## 3 Configure your package.json
-Update :
-- `name`: The name of your package, e.g., `@your-scope/your-package-name` or `your-package-name`.
-- `version`: Reset to `1.0.0`. or the version you want to start with.
-- `description`: A brief description of your package.
-- `keywords`: Add relevant keywords to help others find your package. (e.g., `["bun", "package-template"]`)
-- `exports`: Define the entry points for your package. For example:
-  ```json
-  "exports": {
-    ".": "./dist/index.js",
-    "./types": "./dist/types/index.js"
-  }
-  ```
-
-## 4 Configure your builder
-Just change `entrypoints` in `builder.ts` to your entry point file. (e.g., `source/index.ts`).
-
-## 5 Update README.md
-Update the README.md file with relevant information about your package.
-
----
----
-<!-- You Can Remove all content above this line -->
-
-# 📦 Package Template
+# 🔐 Elysia JWT Plugin
 
 ## 📌 Table of Contents
 
-- [📦 Package Template](#-package-template)
+- [🔐 Elysia JWT Plugin](#-elysia-jwt-plugin)
   - [📌 Table of Contents](#-table-of-contents)
   - [📝 Description](#-description)
-  - [🌟 Documentation](#-documentation)
+  - [✨ Features](#-features)
   - [🔧 Installation](#-installation)
   - [⚙️ Usage](#-usage)
+  - [📚 API Reference](#-api-reference)
   - [⚖️ License](#-license)
   - [📧 Contact](#-contact)
 
 ## 📝 Description
 
-> Template for creating new npm packages with Bun.
+> A secure and type-safe JWT authentication plugin for Elysia applications.
 
-**Package Template** provides a starting point for building and publishing npm packages. Customize this section with a description of your package's purpose and features.
+**Elysia JWT Plugin** provides robust JSON Web Token authentication capabilities for Elysia applications, leveraging the industry-standard `jose` library to ensure secure JWT handling with modern cryptographic standards and full TypeScript support.
 
-## 🌟 Documentation
+## ✨ Features
 
-- [References](https://your-package-docs.com)  
-  *(Update this link to your package documentation if needed.)*
+- 🔒 **Security First**: Built with modern cryptographic standards using the [jose](https://www.npmjs.com/package/jose) library
+- 🧩 **Type Safety**: Full TypeScript support with strongly typed JWT payloads
+- 🎯 **Elysia Integration**: Seamlessly integrates with Elysia's context system
+- ⚙️ **Customizable**: Flexible configuration options for headers, payloads, and expiration
+- � **Easy to Use**: Simple API for signing and verifying JWT tokens
+- 🧪 **Well Tested**: Comprehensive test suite included
 
 ## 🔧 Installation
 
 ```bash
-bun add @your-scope/your-package-name
+bun add @nowarajs/elysia-jwt
 ```
-Replace `@your-scope/your-package-name` with your actual package name.
 
 ## ⚙️ Usage
 
-```ts
-import { YourExportedFunction } from '@your-scope/your-package-name'
+### Basic Usage with Global Expiration
 
-// Example usage
-YourExportedFunction()
+```typescript
+import { Elysia } from 'elysia';
+import { jwtPlugin } from '@nowarajs/elysia-jwt';
+
+const app = new Elysia()
+  .use(jwtPlugin({
+    secret: process.env.JWT_SECRET!,
+    exp: '1h' // Global expiration for all tokens
+  }))
+  .post('/login', ({ jwt }) => {
+    // Sign a JWT token with global expiration (1h)
+    return jwt.sign({ userId: 123, role: 'user' });
+  })
+  .get('/protected', async ({ jwt, headers }) => {
+    // Verify JWT token
+    const token = headers.authorization?.replace('Bearer ', '');
+    const payload = await jwt.verify(token);
+    if (!payload) throw new Error('Invalid token');
+    return { user: payload };
+  })
+  .listen(3000);
 ```
-Update this section with usage examples relevant to your package.
+
+### Access & Refresh Tokens with Different Expiration
+
+```typescript
+import { Elysia } from 'elysia';
+import { jwtPlugin } from '@nowarajs/elysia-jwt';
+
+const app = new Elysia()
+  .use(jwtPlugin({
+    secret: process.env.JWT_SECRET!,
+    exp: '15m' // Default expiration
+  }))
+  .post('/login', ({ jwt }) => {
+    // Access token with short expiration
+    const accessToken = jwt.sign({ 
+      userId: 123, 
+      role: 'user',
+      type: 'access'
+    }, { exp: '15m' });
+    
+    // Refresh token with long expiration
+    const refreshToken = jwt.sign({ 
+      userId: 123, 
+      type: 'refresh' 
+    }, { exp: '7d' });
+    
+    return { accessToken, refreshToken };
+  })
+  .post('/refresh', async ({ jwt, body }) => {
+    // Verify refresh token
+    const payload = await jwt.verify(body.refreshToken);
+    if (!payload || payload.type !== 'refresh') {
+      throw new Error('Invalid refresh token');
+    }
+    
+    // Generate new access token
+    const newAccessToken = jwt.sign({ 
+      userId: payload.userId, 
+      role: 'user',
+      type: 'access'
+    }, { exp: '15m' });
+    
+    return { accessToken: newAccessToken };
+  })
+  .get('/protected', async ({ jwt, headers }) => {
+    const token = headers.authorization?.replace('Bearer ', '');
+    const payload = await jwt.verify(token);
+    if (!payload || payload.type !== 'access') {
+      throw new Error('Invalid access token');
+    }
+    return { user: payload };
+  });
+```
+
+### Custom Payload Configuration
+
+```typescript
+import { Elysia } from 'elysia';
+import { jwtPlugin } from '@nowarajs/elysia-jwt';
+
+const app = new Elysia()
+  .use(jwtPlugin({
+    jwtKeyName: 'auth',
+    secret: 'your-secret-key',
+    exp: '24h',
+    header: {
+      alg: 'HS256',
+      typ: 'JWT'
+    },
+    payload: {
+      iss: 'my-api',
+      aud: 'my-client'
+    }
+  }))
+  .post('/login', ({ auth }) => {
+    // Sign with custom payload (inherits iss and aud from config)
+    return auth.sign({ 
+      userId: 123, 
+      role: 'admin',
+      permissions: ['read', 'write', 'delete'],
+      department: 'engineering'
+    });
+  })
+  .get('/user/:id', async ({ auth, headers, params }) => {
+    const token = headers.authorization?.replace('Bearer ', '');
+    const payload = await auth.verify(token);
+    
+    if (!payload) {
+      throw new Error('Unauthorized');
+    }
+    
+    // Access custom payload fields
+    return { 
+      user: {
+        id: payload.userId,
+        role: payload.role,
+        permissions: payload.permissions,
+        department: payload.department
+      },
+      issuer: payload.iss,
+      audience: payload.aud,
+      requestedId: params.id 
+    };
+  });
+```
+
+## 📚 API Reference
+
+You can find the complete API reference documentation for `Elysia JWT Plugin` at:
+
+- [Reference Documentation](https://nowarajs.github.io/elysia-jwt/)
 
 ## ⚖️ License
 
@@ -145,7 +177,7 @@ Distributed under the MIT License. See [LICENSE](./LICENSE) for more information
 
 ## 📧 Contact
 
-Mail - [your-email@domain.com](mailto:your-email@domain.com)
+NowaraJS - [GitHub Organization](https://github.com/NowaraJS)
 
-[Project link](https://github.com/your-username/your-repo)
+[Project Link](https://github.com/NowaraJS/elysia-jwt)
 
