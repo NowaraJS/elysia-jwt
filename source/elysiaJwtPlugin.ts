@@ -6,7 +6,7 @@ import {
 	type JWTVerifyResult
 } from 'jose';
 
-import { ElysiaJwtPluginError } from '#/utils/error/elysiaJwtPluginError';
+import { ElysiaJwtPluginError } from '#/error/elysiaJwtPluginError';
 import { errorKeys } from './enums/errorKeys';
 import type { ElysiaJWTOptions } from './types/elysiaJwtOptions';
 

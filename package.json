@@ -32,10 +32,10 @@
     "typescript": "^5.8.3"
   },
   "exports": {
+    "./enums": "./dist/enums/index.js",
     "./error": "./dist/error/index.js",
     "./error/types": "./dist/error/types/index.js",
-    "./utils": "./dist/utils/index.js",
-    "./utils/enums": "./dist/utils/enums/index.js",
+    "./types": "./dist/types/index.js",
     ".": "./dist/index.js"
   },
   "changelog": {

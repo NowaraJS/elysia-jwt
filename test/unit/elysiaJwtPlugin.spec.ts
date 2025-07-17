@@ -2,7 +2,7 @@ import { describe, expect, mock, test } from 'bun:test';
 import { Elysia } from 'elysia';
 
 import { elysiaJwtPlugin } from '#/elysiaJwtPlugin';
-import { ElysiaJwtPluginError } from '#/utils/error/elysiaJwtPluginError';
+import { ElysiaJwtPluginError } from '#/error/elysiaJwtPluginError';
 import { errorKeys } from '#/enums/errorKeys';
 import type { JWTPayload, JWTVerifyResult } from 'jose';
 
