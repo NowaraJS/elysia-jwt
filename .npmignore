@@ -32,3 +32,4 @@ sandbox/
 README.md
 tsconfig.json
 tsconfig.build.json
+bunfig.toml
