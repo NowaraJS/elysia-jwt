@@ -1,1 +1,1 @@
-export { ElysiaJwtPluginError as CoreError } from './elysiaJwtPluginError';
+export { JwtPluginError } from './jwtPluginError';

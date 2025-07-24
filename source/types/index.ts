@@ -1,1 +1,1 @@
-export type { ElysiaJWTOptions as JWTOptions } from './elysiaJwtOptions';
+export type { JWTPluginOptions } from './JwtPluginOptions';

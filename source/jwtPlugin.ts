@@ -6,9 +6,9 @@ import {
 	type JWTVerifyResult
 } from 'jose';
 
-import { ElysiaJwtPluginError } from '#/error/elysiaJwtPluginError';
-import { errorKeys } from './enums/errorKeys';
-import type { ElysiaJWTOptions } from './types/elysiaJwtOptions';
+import { JwtPluginError } from '#/error/jwtPluginError';
+import { jwtErrorKeys } from './enums/jwtErrorKeys';
+import type { JWTPluginOptions } from './types/JwtPluginOptions';
 
 /**
  * The `elysiaJwtPlugin` provides secure JSON Web Token (JWT) authentication capabilities for Elysia applications.
@@ -20,7 +20,7 @@ import type { ElysiaJWTOptions } from './types/elysiaJwtOptions';
  *
  * @returns An Elysia plugin that adds JWT functionality to the application context
  *
- * @throws ({@link ElysiaJwtPluginError}) When the secret key is missing or invalid
+ * @throws ({@link JwtPluginError}) When the secret key is missing or invalid
  *
  * @example
  * Basic usage
@@ -51,12 +51,11 @@ import type { ElysiaJWTOptions } from './types/elysiaJwtOptions';
  *   .post('/login', ({ auth }) => auth.sign({ id: 1 }));
  * ```
  */
-export const elysiaJwtPlugin = <const TJWTKeyName extends string = 'jwt'>(options: ElysiaJWTOptions<TJWTKeyName>) => {
+export const jwtPlugin = <const TJWTKeyName extends string = 'jwt'>(options: JWTPluginOptions<TJWTKeyName>) => {
 	// Validate required configuration
 	if (!options.secret)
-		throw new ElysiaJwtPluginError({
-			key: errorKeys.jwtSecretNotFound,
-			message: 'Secret key is required for JWT signing and verification. Please provide a valid secret key.',
+		throw new JwtPluginError({
+			message: jwtErrorKeys.jwtSecretNotFound,
 			httpStatusCode: 500
 		});
 
@@ -73,7 +72,7 @@ export const elysiaJwtPlugin = <const TJWTKeyName extends string = 'jwt'>(option
 	const defaultExpiration = '15m';
 
 	return new Elysia({
-		name: 'elysiaJwtPlugin',
+		name: 'jwtPlugin',
 		seed: options
 	})
 		.decorate(contextKeyName, {
@@ -89,7 +88,7 @@ export const elysiaJwtPlugin = <const TJWTKeyName extends string = 'jwt'>(option
 			 *
 			 * @returns A Promise that resolves to the signed JWT string
 			 *
-			 * @throws ({@link ElysiaJwtPluginError}): When JWT signing fails due to invalid payload or configuration
+			 * @throws ({@link JwtPluginError}): When JWT signing fails due to invalid payload or configuration
 			 *
 			 * @example
 			 * Sign with user data
@@ -154,9 +153,8 @@ export const elysiaJwtPlugin = <const TJWTKeyName extends string = 'jwt'>(option
 
 					return await jwt.sign(encodedKey);
 				} catch (error: unknown) {
-					throw new ElysiaJwtPluginError({
-						key: errorKeys.jwtSignError,
-						message: 'Failed to sign JWT. Please check your payload and configuration.',
+					throw new JwtPluginError({
+						message: jwtErrorKeys.jwtSignError,
 						httpStatusCode: 500,
 						cause: error
 					});
