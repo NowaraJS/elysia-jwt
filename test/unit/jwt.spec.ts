@@ -2,25 +2,25 @@ import { describe, expect, test } from 'bun:test';
 import { Elysia } from 'elysia';
 
 import { jwtErrorKeys } from '#/enums/jwtErrorKeys';
-import { JwtPluginError } from '#/error/jwtPluginError';
-import { jwtPlugin } from '#/jwtPlugin';
+import { JwtError } from '#/error/jwtError';
+import { jwt as jwtPlugin } from '#/jwt';
 import type { JWTVerifyResult } from 'jose';
 
-describe('jwtPlugin', () => {
+describe('jwt', () => {
 	describe('plugin initialization', () => {
 		test('should throw JwtPluginError when secret is not provided', () => {
 			expect(() => {
 				jwtPlugin({ secret: '' });
-			}).toThrow(JwtPluginError);
+			}).toThrow(JwtError);
 		});
 
 		test('should throw with correct error key when secret is missing', () => {
 			try {
 				jwtPlugin({ secret: '' });
 			} catch (error) {
-				expect(error).toBeInstanceOf(JwtPluginError);
-				expect((error as JwtPluginError).message).toBe(jwtErrorKeys.jwtSecretNotFound);
-				expect((error as JwtPluginError).httpStatusCode).toBe(500);
+				expect(error).toBeInstanceOf(JwtError);
+				expect((error as JwtError).message).toBe(jwtErrorKeys.jwtSecretNotFound);
+				expect((error as JwtError).httpStatusCode).toBe(500);
 			}
 		});
 
@@ -32,7 +32,7 @@ describe('jwtPlugin', () => {
 			});
 
 			expect(plugin).toBeDefined();
-			expect(plugin.config.name).toBe('jwtPlugin');
+			expect(plugin.config.name).toBe('jwt');
 		});
 	});
 
@@ -276,7 +276,7 @@ describe('jwtPlugin', () => {
 		});
 
 		test('should throw JwtPluginError when signing fails', async () => {
-			const { jwtPlugin } = await import('#/jwtPlugin');
+			const { jwt: jwtPlugin } = await import('#/jwt');
 			const app = new Elysia().use(
 				jwtPlugin({ secret: testSecret })
 			);
@@ -285,9 +285,9 @@ describe('jwtPlugin', () => {
 			try {
 				await jwt.sign({ userId: 123 }, 'invalid-expiration-format');
 			} catch (error) {
-				expect(error).toBeInstanceOf(JwtPluginError);
-				expect((error as JwtPluginError).httpStatusCode).toBe(500);
-				expect((error as JwtPluginError).message).toContain(jwtErrorKeys.jwtSignError);
+				expect(error).toBeInstanceOf(JwtError);
+				expect((error as JwtError).httpStatusCode).toBe(500);
+				expect((error as JwtError).message).toContain(jwtErrorKeys.jwtSignError);
 			}
 		});
 
@@ -306,8 +306,8 @@ describe('jwtPlugin', () => {
 				await jwt.sign(circularPayload);
 				expect(true).toBe(false); // Should not reach here
 			} catch (error) {
-				expect(error).toBeInstanceOf(JwtPluginError);
-				expect((error as JwtPluginError).message).toBe(jwtErrorKeys.jwtSignError);
+				expect(error).toBeInstanceOf(JwtError);
+				expect((error as JwtError).message).toBe(jwtErrorKeys.jwtSignError);
 			}
 		});
 	});

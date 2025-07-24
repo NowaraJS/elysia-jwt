@@ -1,4 +1,4 @@
-export interface JwtPluginErrorOptions<T = unknown> {
+export interface JwtErrorOptions<T = unknown> {
 	/**
 	 * The error message describing what went wrong.
 	*/

@@ -6,9 +6,9 @@ import {
 	type JWTVerifyResult
 } from 'jose';
 
-import { JwtPluginError } from '#/error/jwtPluginError';
+import { JwtError } from '#/error/jwtError';
 import { jwtErrorKeys } from './enums/jwtErrorKeys';
-import type { JWTPluginOptions } from './types/JwtPluginOptions';
+import type { JWTOptions } from './types/JwtOptions';
 
 /**
  * The `elysiaJwtPlugin` provides secure JSON Web Token (JWT) authentication capabilities for Elysia applications.
@@ -20,7 +20,7 @@ import type { JWTPluginOptions } from './types/JwtPluginOptions';
  *
  * @returns An Elysia plugin that adds JWT functionality to the application context
  *
- * @throws ({@link JwtPluginError}) When the secret key is missing or invalid
+ * @throws ({@link JwtError}) When the secret key is missing or invalid
  *
  * @example
  * Basic usage
@@ -51,10 +51,10 @@ import type { JWTPluginOptions } from './types/JwtPluginOptions';
  *   .post('/login', ({ auth }) => auth.sign({ id: 1 }));
  * ```
  */
-export const jwtPlugin = <const TJWTKeyName extends string = 'jwt'>(options: JWTPluginOptions<TJWTKeyName>) => {
+export const jwt = <const TJWTKeyName extends string = 'jwt'>(options: JWTOptions<TJWTKeyName>) => {
 	// Validate required configuration
 	if (!options.secret)
-		throw new JwtPluginError({
+		throw new JwtError({
 			message: jwtErrorKeys.jwtSecretNotFound,
 			httpStatusCode: 500
 		});
@@ -72,14 +72,14 @@ export const jwtPlugin = <const TJWTKeyName extends string = 'jwt'>(options: JWT
 	const defaultExpiration = '15m';
 
 	return new Elysia({
-		name: 'jwtPlugin',
+		name: 'jwt',
 		seed: options
 	})
 		.decorate(contextKeyName, {
 			/**
 			 * Signs a JWT with the provided payload and optional expiration time.
 			 *
-			 * This method creates a new JWT with the specified payload, merging it with
+			 * This method creates a new JWT with the specified payload, merging it withrateLimitError
 			 * any default payload values configured in the plugin options. The resulting
 			 * token includes standard claims and custom data as needed.
 			 *
@@ -88,7 +88,7 @@ export const jwtPlugin = <const TJWTKeyName extends string = 'jwt'>(options: JWT
 			 *
 			 * @returns A Promise that resolves to the signed JWT string
 			 *
-			 * @throws ({@link JwtPluginError}): When JWT signing fails due to invalid payload or configuration
+			 * @throws ({@link JwtError}): When JWT signing fails due to invalid payload or configuration
 			 *
 			 * @example
 			 * Sign with user data
@@ -153,7 +153,7 @@ export const jwtPlugin = <const TJWTKeyName extends string = 'jwt'>(options: JWT
 
 					return await jwt.sign(encodedKey);
 				} catch (error: unknown) {
-					throw new JwtPluginError({
+					throw new JwtError({
 						message: jwtErrorKeys.jwtSignError,
 						httpStatusCode: 500,
 						cause: error
