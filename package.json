@@ -2,14 +2,14 @@
 	"name": "@nowarajs/elysia-jwt",
 	"version": "1.3.2",
 	"author": "NowaraJS",
-	"description": "A template to create a bun package.",
+	"description": "Elysia plugin for JWT authentication, using the jose library.",
 	"type": "module",
 	"license": "MIT",
 	"keywords": [
 		"bun",
+		"nowarajs",
 		"jwt",
 		"elysia",
-		"elysia-jwt",
 		"elysia-jwt"
 	],
 	"scripts": {
