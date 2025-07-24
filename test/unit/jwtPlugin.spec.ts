@@ -1,38 +1,38 @@
-import { describe, expect, mock, test } from 'bun:test';
+import { describe, expect, test } from 'bun:test';
 import { Elysia } from 'elysia';
 
-import { elysiaJwtPlugin } from '#/elysiaJwtPlugin';
-import { ElysiaJwtPluginError } from '#/error/elysiaJwtPluginError';
-import { errorKeys } from '#/enums/errorKeys';
-import type { JWTPayload, JWTVerifyResult } from 'jose';
+import { jwtErrorKeys } from '#/enums/jwtErrorKeys';
+import { JwtPluginError } from '#/error/jwtPluginError';
+import { jwtPlugin } from '#/jwtPlugin';
+import type { JWTVerifyResult } from 'jose';
 
-describe('elysiaJwtPlugin', () => {
+describe('jwtPlugin', () => {
 	describe('plugin initialization', () => {
-		test('should throw ElysiaJwtPluginError when secret is not provided', () => {
+		test('should throw JwtPluginError when secret is not provided', () => {
 			expect(() => {
-				elysiaJwtPlugin({ secret: '' });
-			}).toThrow(ElysiaJwtPluginError);
+				jwtPlugin({ secret: '' });
+			}).toThrow(JwtPluginError);
 		});
 
 		test('should throw with correct error key when secret is missing', () => {
 			try {
-				elysiaJwtPlugin({ secret: '' });
+				jwtPlugin({ secret: '' });
 			} catch (error) {
-				expect(error).toBeInstanceOf(ElysiaJwtPluginError);
-				expect((error as ElysiaJwtPluginError).key).toBe(errorKeys.jwtSecretNotFound);
-				expect((error as ElysiaJwtPluginError).httpStatusCode).toBe(500);
+				expect(error).toBeInstanceOf(JwtPluginError);
+				expect((error as JwtPluginError).message).toBe(jwtErrorKeys.jwtSecretNotFound);
+				expect((error as JwtPluginError).httpStatusCode).toBe(500);
 			}
 		});
 
 		test('should create plugin successfully with valid configuration', () => {
-			const plugin = elysiaJwtPlugin({
+			const plugin = jwtPlugin({
 				secret: 'my-very-secure-secret-key-that-is-long-enough-for-hs256-algorithm',
 				exp: '1h',
 				payload: { iss: 'test-issuer' }
 			});
 
 			expect(plugin).toBeDefined();
-			expect(plugin.config.name).toBe('elysiaJwtPlugin');
+			expect(plugin.config.name).toBe('jwtPlugin');
 		});
 	});
 
@@ -41,7 +41,7 @@ describe('elysiaJwtPlugin', () => {
 
 		test('should sign and verify JWT successfully', async () => {
 			const app = new Elysia().use(
-				elysiaJwtPlugin({
+				jwtPlugin({
 					secret: testSecret,
 					exp: '1h'
 				})
@@ -63,7 +63,7 @@ describe('elysiaJwtPlugin', () => {
 
 		test('should include default payload in signed JWT', async () => {
 			const app = new Elysia().use(
-				elysiaJwtPlugin({
+				jwtPlugin({
 					secret: testSecret,
 					payload: { iss: 'test-app', aud: 'test-client' }
 				})
@@ -81,7 +81,7 @@ describe('elysiaJwtPlugin', () => {
 
 		test('should override default payload with additional payload', async () => {
 			const app = new Elysia().use(
-				elysiaJwtPlugin({
+				jwtPlugin({
 					secret: testSecret,
 					payload: { iss: 'default-issuer', aud: 'default-audience' }
 				})
@@ -102,7 +102,7 @@ describe('elysiaJwtPlugin', () => {
 
 		test('should return false for invalid JWT', async () => {
 			const app = new Elysia().use(
-				elysiaJwtPlugin({ secret: testSecret })
+				jwtPlugin({ secret: testSecret })
 			);
 
 			const { jwt } = app.decorator;
@@ -118,7 +118,7 @@ describe('elysiaJwtPlugin', () => {
 		});
 		test('should include standard JWT claims', async () => {
 			const app = new Elysia().use(
-				elysiaJwtPlugin({ secret: testSecret })
+				jwtPlugin({ secret: testSecret })
 			);
 
 			const { jwt } = app.decorator;
@@ -133,7 +133,7 @@ describe('elysiaJwtPlugin', () => {
 
 		test('should work with custom JWT key name', async () => {
 			const app = new Elysia().use(
-				elysiaJwtPlugin({
+				jwtPlugin({
 					jwtKeyName: 'auth',
 					secret: testSecret
 				})
@@ -154,11 +154,11 @@ describe('elysiaJwtPlugin', () => {
 
 		test('should reject JWT signed with different secret', async () => {
 			const app1 = new Elysia().use(
-				elysiaJwtPlugin({ secret: testSecret })
+				jwtPlugin({ secret: testSecret })
 			);
 
 			const app2 = new Elysia().use(
-				elysiaJwtPlugin({ secret: 'different-secret-key-that-is-also-long-enough' })
+				jwtPlugin({ secret: 'different-secret-key-that-is-also-long-enough' })
 			);
 
 			const { jwt: jwt1 } = app1.decorator;
@@ -172,7 +172,7 @@ describe('elysiaJwtPlugin', () => {
 
 		test('should generate unique JWT IDs for different tokens', async () => {
 			const app = new Elysia().use(
-				elysiaJwtPlugin({ secret: testSecret })
+				jwtPlugin({ secret: testSecret })
 			);
 
 			const { jwt } = app.decorator;
@@ -192,7 +192,7 @@ describe('elysiaJwtPlugin', () => {
 
 		test('should handle custom headers correctly', async () => {
 			const app = new Elysia().use(
-				elysiaJwtPlugin({
+				jwtPlugin({
 					secret: testSecret,
 					header: {
 						kid: 'key-1',
@@ -213,7 +213,7 @@ describe('elysiaJwtPlugin', () => {
 
 		test('should handle payload without issuer', async () => {
 			const app = new Elysia().use(
-				elysiaJwtPlugin({
+				jwtPlugin({
 					secret: testSecret,
 					payload: { aud: 'test-client' } // No issuer
 				})
@@ -234,7 +234,7 @@ describe('elysiaJwtPlugin', () => {
 
 		test('should handle payload without audience', async () => {
 			const app = new Elysia().use(
-				elysiaJwtPlugin({
+				jwtPlugin({
 					secret: testSecret,
 					payload: { iss: 'test-issuer' } // No audience
 				})
@@ -255,7 +255,7 @@ describe('elysiaJwtPlugin', () => {
 
 		test('should handle both undefined issuer and audience', async () => {
 			const app = new Elysia().use(
-				elysiaJwtPlugin({
+				jwtPlugin({
 					secret: testSecret
 					// No default payload
 				})
@@ -275,26 +275,25 @@ describe('elysiaJwtPlugin', () => {
 			expect(payload?.aud).toEqual(['elysia-application']);
 		});
 
-		test('should throw ElysiaJwtPluginError when signing fails', async () => {
-			const { elysiaJwtPlugin } = await import('#/elysiaJwtPlugin');
+		test('should throw JwtPluginError when signing fails', async () => {
+			const { jwtPlugin } = await import('#/jwtPlugin');
 			const app = new Elysia().use(
-				elysiaJwtPlugin({ secret: testSecret })
+				jwtPlugin({ secret: testSecret })
 			);
 			const { jwt } = app.decorator;
 
 			try {
 				await jwt.sign({ userId: 123 }, 'invalid-expiration-format');
 			} catch (error) {
-				expect(error).toBeInstanceOf(ElysiaJwtPluginError);
-				expect((error as ElysiaJwtPluginError).key).toBe(errorKeys.jwtSignError);
-				expect((error as ElysiaJwtPluginError).httpStatusCode).toBe(500);
-				expect((error as ElysiaJwtPluginError).message).toContain('Failed to sign JWT');
+				expect(error).toBeInstanceOf(JwtPluginError);
+				expect((error as JwtPluginError).httpStatusCode).toBe(500);
+				expect((error as JwtPluginError).message).toContain(jwtErrorKeys.jwtSignError);
 			}
 		});
 
 		test('should handle signing with circular reference payload', async () => {
 			const app = new Elysia().use(
-				elysiaJwtPlugin({ secret: testSecret })
+				jwtPlugin({ secret: testSecret })
 			);
 
 			const { jwt } = app.decorator;
@@ -307,8 +306,8 @@ describe('elysiaJwtPlugin', () => {
 				await jwt.sign(circularPayload);
 				expect(true).toBe(false); // Should not reach here
 			} catch (error) {
-				expect(error).toBeInstanceOf(ElysiaJwtPluginError);
-				expect((error as ElysiaJwtPluginError).key).toBe(errorKeys.jwtSignError);
+				expect(error).toBeInstanceOf(JwtPluginError);
+				expect((error as JwtPluginError).message).toBe(jwtErrorKeys.jwtSignError);
 			}
 		});
 	});

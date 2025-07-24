@@ -1,1 +1,1 @@
-export { elysiaJwtPlugin as jwtPlugin } from './elysiaJwtPlugin';
+export { jwtPlugin } from './jwtPlugin';

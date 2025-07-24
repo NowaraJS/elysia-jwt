@@ -4,7 +4,7 @@
  * These keys provide consistent error identification across the plugin,
  * enabling better error handling, logging, and internationalization.
  */
-export const errorKeys = {
+export const jwtErrorKeys = {
 	/** Error when JWT secret key is not provided or is empty */
 	jwtSecretNotFound: 'elysia.jwt.error.secret_not_found',
 
@@ -24,4 +24,4 @@ export const errorKeys = {
 /**
  * Type for JWT error keys to ensure type safety when using error keys.
  */
-export type JwtErrorKey = typeof errorKeys[keyof typeof errorKeys];
+export type JwtErrorKey = typeof jwtErrorKeys[keyof typeof jwtErrorKeys];

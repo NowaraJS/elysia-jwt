@@ -1,1 +1,1 @@
-export type { JwtErrorKey } from './errorKeys';
+export type { JwtErrorKey } from './jwtErrorKeys';
