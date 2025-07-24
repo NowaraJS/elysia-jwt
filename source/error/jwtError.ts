@@ -1,8 +1,8 @@
 import { randomUUIDv7 } from 'bun';
 
-import type { JwtPluginErrorOptions } from './types/JwtPluginErrorOptions';
+import type { JwtErrorOptions } from './types/JwtErrorOptions';
 
-export class JwtPluginError<const T = unknown> extends Error {
+export class JwtError<const T = unknown> extends Error {
 	public override readonly cause: T | undefined;
 
 	private readonly _uuid: string = randomUUIDv7();
@@ -11,9 +11,9 @@ export class JwtPluginError<const T = unknown> extends Error {
 
 	private readonly _httpStatusCode: number;
 
-	public constructor(jwtErrorOptions?: Readonly<JwtPluginErrorOptions<T>>) {
+	public constructor(jwtErrorOptions?: Readonly<JwtErrorOptions<T>>) {
 		super(jwtErrorOptions?.message);
-		super.name = 'JwtPluginError';
+		super.name = 'JwtError';
 		this.cause = jwtErrorOptions?.cause;
 		this._httpStatusCode = jwtErrorOptions?.httpStatusCode || 500;
 	}

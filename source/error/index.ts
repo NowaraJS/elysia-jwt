@@ -1,1 +1,1 @@
-export { JwtPluginError } from './jwtPluginError';
+export { JwtError as JwtPluginError } from './jwtError';
