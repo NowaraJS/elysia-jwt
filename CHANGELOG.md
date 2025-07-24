@@ -1,4 +1,16 @@
 
+## v1.3.4
+
+[compare changes](https://github.com/NowaraJS/elysia-jwt/compare/v1.3.3...v1.3.4)
+
+### 🧹 Refactors
+
+- **🧹:** [Rename (yes again)] ([1c9b182](https://github.com/NowaraJS/elysia-jwt/commit/1c9b182))
+
+### ❤️ Contributors
+
+- Komiroko <komiriko@pm.me>
+
 ## v1.3.3
 
 [compare changes](https://github.com/NowaraJS/elysia-jwt/compare/v1.3.2...v1.3.3)
