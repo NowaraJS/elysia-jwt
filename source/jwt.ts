@@ -26,7 +26,7 @@ import type { JWTOptions } from './types/JwtOptions';
  * Basic usage
  * ```ts
  * const app = new Elysia()
- *   .use(elysiaJwtPlugin({
+ *   .use(jwt({
  *     secret: process.env.JWT_SECRET!,
  *     exp: '1h'
  *   }))
@@ -44,7 +44,7 @@ import type { JWTOptions } from './types/JwtOptions';
  * Custom context key name
  * ```ts
  * const app2 = new Elysia()
- *   .use(elysiaJwtPlugin({
+ *   .use(jwt({
  *     jwtKeyName: 'auth',
  *     secret: 'my-secret'
  *   }))
