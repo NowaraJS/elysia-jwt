@@ -2,52 +2,52 @@ import { describe, expect, test } from 'bun:test';
 
 import { JwtError } from '#/error/jwtError';
 
-describe('JwtPluginError', () => {
+describe('JwtError', () => {
 	describe('constructor', () => {
-		test('should create a new JwtPluginError instance with specific properties when valid options are provided', () => {
-			const jwtPluginError = new JwtError<{ details: string }>({
+		test('should create a new JwtError instance with specific properties when valid options are provided', () => {
+			const jwtError = new JwtError<{ details: string }>({
 				message: 'error.jwt.validation',
 				httpStatusCode: 401,
 				cause: { details: 'Invalid token signature' }
 			});
 
-			expect(jwtPluginError).toBeInstanceOf(JwtError);
-			expect(jwtPluginError).toBeInstanceOf(Error);
-			expect(jwtPluginError.uuid).toBeTypeOf('string');
-			expect(jwtPluginError.uuid).toHaveLength(36); // UUID v7 length
-			expect(jwtPluginError.date).toBeInstanceOf(Date);
-			expect(jwtPluginError.httpStatusCode).toBe(401);
-			expect(jwtPluginError.cause).toEqual({ details: 'Invalid token signature' });
-			expect(jwtPluginError.message).toBe('error.jwt.validation');
-			expect(jwtPluginError.name).toBe('JwtError');
-			expect(jwtPluginError.stack).toBeTypeOf('string');
+			expect(jwtError).toBeInstanceOf(JwtError);
+			expect(jwtError).toBeInstanceOf(Error);
+			expect(jwtError.uuid).toBeTypeOf('string');
+			expect(jwtError.uuid).toHaveLength(36); // UUID v7 length
+			expect(jwtError.date).toBeInstanceOf(Date);
+			expect(jwtError.httpStatusCode).toBe(401);
+			expect(jwtError.cause).toEqual({ details: 'Invalid token signature' });
+			expect(jwtError.message).toBe('error.jwt.validation');
+			expect(jwtError.name).toBe('JwtError');
+			expect(jwtError.stack).toBeTypeOf('string');
 		});
 
-		test('should create a new JwtPluginError instance with default properties when no options are provided', () => {
-			const jwtPluginError = new JwtError();
+		test('should create a new JwtError instance with default properties when no options are provided', () => {
+			const jwtError = new JwtError();
 
-			expect(jwtPluginError).toBeInstanceOf(JwtError);
-			expect(jwtPluginError).toBeInstanceOf(Error);
-			expect(jwtPluginError.uuid).toBeTypeOf('string');
-			expect(jwtPluginError.uuid).toHaveLength(36); // UUID v7 length
-			expect(jwtPluginError.date).toBeInstanceOf(Date);
-			expect(jwtPluginError.httpStatusCode).toBe(500);
-			expect(jwtPluginError.cause).toBeUndefined();
-			expect(jwtPluginError.message).toBe('');
-			expect(jwtPluginError.name).toBe('JwtError');
-			expect(jwtPluginError.stack).toBeTypeOf('string');
+			expect(jwtError).toBeInstanceOf(JwtError);
+			expect(jwtError).toBeInstanceOf(Error);
+			expect(jwtError.uuid).toBeTypeOf('string');
+			expect(jwtError.uuid).toHaveLength(36); // UUID v7 length
+			expect(jwtError.date).toBeInstanceOf(Date);
+			expect(jwtError.httpStatusCode).toBe(500);
+			expect(jwtError.cause).toBeUndefined();
+			expect(jwtError.message).toBe('');
+			expect(jwtError.name).toBe('JwtError');
+			expect(jwtError.stack).toBeTypeOf('string');
 		});
 
-		test('should create a new JwtPluginError instance with partial options', () => {
-			const jwtPluginError = new JwtError({
+		test('should create a new JwtError instance with partial options', () => {
+			const jwtError = new JwtError({
 				message: 'Token expired',
 				httpStatusCode: 403
 			});
 
-			expect(jwtPluginError).toBeInstanceOf(JwtError);
-			expect(jwtPluginError.message).toBe('Token expired');
-			expect(jwtPluginError.httpStatusCode).toBe(403);
-			expect(jwtPluginError.cause).toBeUndefined();
+			expect(jwtError).toBeInstanceOf(JwtError);
+			expect(jwtError.message).toBe('Token expired');
+			expect(jwtError.httpStatusCode).toBe(403);
+			expect(jwtError.cause).toBeUndefined();
 		});
 
 		test('should generate unique UUIDs for different instances', () => {
@@ -70,44 +70,44 @@ describe('JwtPluginError', () => {
 
 		test('should preserve the original Error properties', () => {
 			const originalError = new Error('Original error');
-			const jwtPluginError = new JwtError({
+			const jwtError = new JwtError({
 				message: 'Wrapped error',
 				cause: originalError
 			});
 
-			expect(jwtPluginError.cause).toBe(originalError);
-			expect(jwtPluginError.stack).toContain('JwtError');
+			expect(jwtError.cause).toBe(originalError);
+			expect(jwtError.stack).toContain('JwtError');
 		});
 	});
 
 	describe('getters', () => {
 		test('should return correct values from getters', () => {
-			const jwtPluginError = new JwtError({
+			const jwtError = new JwtError({
 				message: 'test.key',
 
 				httpStatusCode: 400,
 				cause: 'test cause'
 			});
 
-			expect(jwtPluginError.uuid).toBeTypeOf('string');
-			expect(jwtPluginError.date).toBeInstanceOf(Date);
-			expect(jwtPluginError.httpStatusCode).toBe(400);
+			expect(jwtError.uuid).toBeTypeOf('string');
+			expect(jwtError.date).toBeInstanceOf(Date);
+			expect(jwtError.httpStatusCode).toBe(400);
 		});
 
 		test('should return immutable values', () => {
-			const jwtPluginError = new JwtError({
+			const jwtError = new JwtError({
 				message: 'test.key',
 				httpStatusCode: 400
 			});
 
-			const originalUuid = jwtPluginError.uuid;
-			const originalDate = jwtPluginError.date;
-			const originalHttpStatusCode = jwtPluginError.httpStatusCode;
+			const originalUuid = jwtError.uuid;
+			const originalDate = jwtError.date;
+			const originalHttpStatusCode = jwtError.httpStatusCode;
 
 			// Verify that getters return the same values
-			expect(jwtPluginError.uuid).toBe(originalUuid);
-			expect(jwtPluginError.date).toBe(originalDate);
-			expect(jwtPluginError.httpStatusCode).toBe(originalHttpStatusCode);
+			expect(jwtError.uuid).toBe(originalUuid);
+			expect(jwtError.date).toBe(originalDate);
+			expect(jwtError.httpStatusCode).toBe(originalHttpStatusCode);
 		});
 	});
 });
