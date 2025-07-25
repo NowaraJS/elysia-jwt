@@ -124,7 +124,5 @@ Distributed under the MIT License. See [LICENSE](./LICENSE) for more information
 
 ## 📧 Contact
 
-NowaraJS - [GitHub Organization](https://github.com/NowaraJS)
-
-[Project Link](https://github.com/NowaraJS/elysia-jwt)
-
+- GitHub: [NowaraJS](https://github.com/NowaraJS)
+- Package: [@nowarajs/elysia-jwt](https://www.npmjs.com/package/@nowarajs/elysia-jwt)
