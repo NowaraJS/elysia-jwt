@@ -30,7 +30,7 @@
 ## 🔧 Installation
 
 ```bash
-bun add @nowarajs/elysia-jwt elysia
+bun add @nowarajs/elysia-jwt @nowarajs/error elysia
 ```
 
 ## ⚙️ Usage
