@@ -1,4 +1,16 @@
 
+## v1.3.8
+
+[compare changes](https://github.com/NowaraJS/elysia-jwt/compare/v1.3.7...v1.3.8)
+
+### 📖 Documentation
+
+- **📖:** [Update installation instructions in README] ([835d631](https://github.com/NowaraJS/elysia-jwt/commit/835d631))
+
+### ❤️ Contributors
+
+- Komiroko <komiriko@pm.me>
+
 ## v1.3.7
 
 [compare changes](https://github.com/NowaraJS/elysia-jwt/compare/v1.3.6...v1.3.7)
