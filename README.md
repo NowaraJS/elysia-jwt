@@ -1,4 +1,4 @@
-# 🔐 Elysia JWT Plugin
+# 🔐 NowaraJS - Elysia JWT Plugin
 
 ## 📌 Table of Contents
 
