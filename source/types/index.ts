@@ -1,1 +1,1 @@
-export type { JWTOptions as JWTPluginOptions } from './JwtOptions';
+export type { JWTOptions } from './JwtOptions';

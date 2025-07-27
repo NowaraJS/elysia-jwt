@@ -1,1 +1,0 @@
-export type { JwtErrorOptions as JwtPluginErrorOptions } from './JwtErrorOptions';

@@ -5,8 +5,8 @@ import {
 	type JWTPayload,
 	type JWTVerifyResult
 } from 'jose';
+import { HttpError } from '@nowarajs/error';
 
-import { JwtError } from '#/error/jwtError';
 import { jwtErrorKeys } from './enums/jwtErrorKeys';
 import type { JWTOptions } from './types/JwtOptions';
 
@@ -20,7 +20,7 @@ import type { JWTOptions } from './types/JwtOptions';
  *
  * @returns An Elysia plugin that adds JWT functionality to the application context
  *
- * @throws ({@link JwtError}) When the secret key is missing or invalid
+ * @throws ({@link HttpError}) When the secret key is missing or invalid
  *
  * @example
  * Basic usage
@@ -54,9 +54,9 @@ import type { JWTOptions } from './types/JwtOptions';
 export const jwt = <const TJWTKeyName extends string = 'jwt'>(options: JWTOptions<TJWTKeyName>) => {
 	// Validate required configuration
 	if (!options.secret)
-		throw new JwtError({
+		throw new HttpError({
 			message: jwtErrorKeys.jwtSecretNotFound,
-			httpStatusCode: 500
+			httpStatusCode: 'INTERNAL_SERVER_ERROR'
 		});
 
 	// Encode string secret to Uint8Array for cryptographic operations
@@ -88,7 +88,7 @@ export const jwt = <const TJWTKeyName extends string = 'jwt'>(options: JWTOption
 			 *
 			 * @returns A Promise that resolves to the signed JWT string
 			 *
-			 * @throws ({@link JwtError}): When JWT signing fails due to invalid payload or configuration
+			 * @throws ({@link HttpError}): When JWT signing fails due to invalid payload or configuration
 			 *
 			 * @example
 			 * Sign with user data
@@ -153,9 +153,9 @@ export const jwt = <const TJWTKeyName extends string = 'jwt'>(options: JWTOption
 
 					return await jwt.sign(encodedKey);
 				} catch (error: unknown) {
-					throw new JwtError({
+					throw new HttpError({
 						message: jwtErrorKeys.jwtSignError,
-						httpStatusCode: 500,
+						httpStatusCode: 'INTERNAL_SERVER_ERROR',
 						cause: error
 					});
 				}

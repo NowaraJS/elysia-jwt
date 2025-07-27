@@ -1,26 +1,26 @@
 import { describe, expect, test } from 'bun:test';
 import { Elysia } from 'elysia';
+import { HttpError } from '@nowarajs/error';
 
 import { jwtErrorKeys } from '#/enums/jwtErrorKeys';
-import { JwtError } from '#/error/jwtError';
 import { jwt as jwtPlugin } from '#/jwt';
 import type { JWTVerifyResult } from 'jose';
 
 describe('jwt', () => {
 	describe('plugin initialization', () => {
-		test('should throw JwtPluginError when secret is not provided', () => {
+		test('should throw HttpError when secret is not provided', () => {
 			expect(() => {
 				jwtPlugin({ secret: '' });
-			}).toThrow(JwtError);
+			}).toThrow(HttpError);
 		});
 
 		test('should throw with correct error key when secret is missing', () => {
 			try {
 				jwtPlugin({ secret: '' });
 			} catch (error) {
-				expect(error).toBeInstanceOf(JwtError);
-				expect((error as JwtError).message).toBe(jwtErrorKeys.jwtSecretNotFound);
-				expect((error as JwtError).httpStatusCode).toBe(500);
+				expect(error).toBeInstanceOf(HttpError);
+				expect((error as HttpError).message).toBe(jwtErrorKeys.jwtSecretNotFound);
+				expect((error as HttpError).httpStatusCode).toBe(500);
 			}
 		});
 
@@ -275,7 +275,7 @@ describe('jwt', () => {
 			expect(payload?.aud).toEqual(['elysia-application']);
 		});
 
-		test('should throw JwtPluginError when signing fails', async () => {
+		test('should throw HttpError when signing fails', async () => {
 			const { jwt: jwtPlugin } = await import('#/jwt');
 			const app = new Elysia().use(
 				jwtPlugin({ secret: testSecret })
@@ -285,9 +285,9 @@ describe('jwt', () => {
 			try {
 				await jwt.sign({ userId: 123 }, 'invalid-expiration-format');
 			} catch (error) {
-				expect(error).toBeInstanceOf(JwtError);
-				expect((error as JwtError).httpStatusCode).toBe(500);
-				expect((error as JwtError).message).toContain(jwtErrorKeys.jwtSignError);
+				expect(error).toBeInstanceOf(HttpError);
+				expect((error as HttpError).httpStatusCode).toBe(500);
+				expect((error as HttpError).message).toContain(jwtErrorKeys.jwtSignError);
 			}
 		});
 
@@ -306,8 +306,8 @@ describe('jwt', () => {
 				await jwt.sign(circularPayload);
 				expect(true).toBe(false); // Should not reach here
 			} catch (error) {
-				expect(error).toBeInstanceOf(JwtError);
-				expect((error as JwtError).message).toBe(jwtErrorKeys.jwtSignError);
+				expect(error).toBeInstanceOf(HttpError);
+				expect((error as HttpError).message).toBe(jwtErrorKeys.jwtSignError);
 			}
 		});
 	});
