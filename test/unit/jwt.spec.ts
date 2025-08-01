@@ -1,10 +1,10 @@
+import { HttpError } from '@nowarajs/error';
 import { describe, expect, test } from 'bun:test';
 import { Elysia } from 'elysia';
-import { HttpError } from '@nowarajs/error';
-
-import { jwtErrorKeys } from '#/enums/jwtErrorKeys';
-import { jwt as jwtPlugin } from '#/jwt';
 import type { JWTVerifyResult } from 'jose';
+
+import { JWT_ERROR_KEYS } from '#/enums/jwtErrorKeys';
+import { jwt as jwtPlugin } from '#/jwt';
 
 describe('jwt', () => {
 	describe('plugin initialization', () => {
@@ -19,7 +19,7 @@ describe('jwt', () => {
 				jwtPlugin({ secret: '' });
 			} catch (error) {
 				expect(error).toBeInstanceOf(HttpError);
-				expect((error as HttpError).message).toBe(jwtErrorKeys.jwtSecretNotFound);
+				expect((error as HttpError).message).toBe(JWT_ERROR_KEYS.JWT_SECRET_NOT_FOUND);
 				expect((error as HttpError).httpStatusCode).toBe(500);
 			}
 		});
@@ -276,7 +276,6 @@ describe('jwt', () => {
 		});
 
 		test('should throw HttpError when signing fails', async () => {
-			const { jwt: jwtPlugin } = await import('#/jwt');
 			const app = new Elysia().use(
 				jwtPlugin({ secret: testSecret })
 			);
@@ -287,7 +286,7 @@ describe('jwt', () => {
 			} catch (error) {
 				expect(error).toBeInstanceOf(HttpError);
 				expect((error as HttpError).httpStatusCode).toBe(500);
-				expect((error as HttpError).message).toContain(jwtErrorKeys.jwtSignError);
+				expect((error as HttpError).message).toContain(JWT_ERROR_KEYS.JWT_SIGN_ERROR);
 			}
 		});
 
@@ -307,7 +306,7 @@ describe('jwt', () => {
 				expect(true).toBe(false); // Should not reach here
 			} catch (error) {
 				expect(error).toBeInstanceOf(HttpError);
-				expect((error as HttpError).message).toBe(jwtErrorKeys.jwtSignError);
+				expect((error as HttpError).message).toBe(JWT_ERROR_KEYS.JWT_SIGN_ERROR);
 			}
 		});
 	});

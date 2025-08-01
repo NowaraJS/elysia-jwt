@@ -1,3 +1,4 @@
+import { HttpError } from '@nowarajs/error';
 import { Elysia } from 'elysia';
 import {
 	SignJWT,
@@ -5,9 +6,8 @@ import {
 	type JWTPayload,
 	type JWTVerifyResult
 } from 'jose';
-import { HttpError } from '@nowarajs/error';
 
-import { jwtErrorKeys } from './enums/jwtErrorKeys';
+import { JWT_ERROR_KEYS } from './enums/jwtErrorKeys';
 import type { JWTOptions } from './types/JwtOptions';
 
 /**
@@ -55,7 +55,7 @@ export const jwt = <const TJWTKeyName extends string = 'jwt'>(options: JWTOption
 	// Validate required configuration
 	if (!options.secret)
 		throw new HttpError({
-			message: jwtErrorKeys.jwtSecretNotFound,
+			message: JWT_ERROR_KEYS.JWT_SECRET_NOT_FOUND,
 			httpStatusCode: 'INTERNAL_SERVER_ERROR'
 		});
 
@@ -154,7 +154,7 @@ export const jwt = <const TJWTKeyName extends string = 'jwt'>(options: JWTOption
 					return await jwt.sign(encodedKey);
 				} catch (error: unknown) {
 					throw new HttpError({
-						message: jwtErrorKeys.jwtSignError,
+						message: JWT_ERROR_KEYS.JWT_SIGN_ERROR,
 						httpStatusCode: 'INTERNAL_SERVER_ERROR',
 						cause: error
 					});
@@ -204,6 +204,5 @@ export const jwt = <const TJWTKeyName extends string = 'jwt'>(options: JWTOption
 					return false;
 				}
 			}
-		})
-		.as('scoped');
+		});
 };
