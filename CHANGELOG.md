@@ -1,4 +1,20 @@
 
+## v1.3.10
+
+[compare changes](https://github.com/NowaraJS/elysia-jwt/compare/v1.3.9...v1.3.10)
+
+### 📦 Build
+
+- **📦:** [Update devDependencies and peerDependencies] ([217906b](https://github.com/NowaraJS/elysia-jwt/commit/217906b))
+
+### 🤖 CI
+
+- **🤖:** [Add CI workflows for build, test, and deployment] ## CI Changes - Added new workflows for unit tests, integration tests, and deployment. - Created jobs for linting, building, and publishing to NPM. - Implemented rebase functionality for branch management. - Enhanced secret verification steps for security. ([542d200](https://github.com/NowaraJS/elysia-jwt/commit/542d200))
+
+### ❤️ Contributors
+
+- Komiroko <komiriko@pm.me>
+
 ## v1.3.9
 
 [compare changes](https://github.com/NowaraJS/elysia-jwt/compare/v1.3.8...v1.3.9)
