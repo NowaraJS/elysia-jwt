@@ -1,4 +1,20 @@
 
+## v1.3.11
+
+[compare changes](https://github.com/NowaraJS/elysia-jwt/compare/v1.3.10...v1.3.11)
+
+### 📖 Documentation
+
+- **📖:** [Update copilot instructions for development workflow] ([050c266](https://github.com/NowaraJS/elysia-jwt/commit/050c266))
+
+### 📦 Build
+
+- **📦:** [Update devDependencies and peerDependencies] - Updated `typescript-eslint` from `^8.39.0` to `^8.39.1`. - Updated `@nowarajs/error` from `^1.1.5` to `^1.1.6`. ([4691a6b](https://github.com/NowaraJS/elysia-jwt/commit/4691a6b))
+
+### ❤️ Contributors
+
+- Komiroko <komiriko@pm.me>
+
 ## v1.3.10
 
 [compare changes](https://github.com/NowaraJS/elysia-jwt/compare/v1.3.9...v1.3.10)
