@@ -1,6 +1,6 @@
 {
 	"name": "@nowarajs/elysia-jwt",
-	"version": "1.3.11",
+	"version": "1.3.12",
 	"author": "NowaraJS",
 	"description": "Elysia plugin for JWT authentication, using the jose library.",
 	"type": "module",

@@ -1,4 +1,27 @@
 
+## v1.3.12
+
+[compare changes](https://github.com/NowaraJS/elysia-jwt/compare/v1.3.11...v1.3.12)
+
+### 📖 Documentation
+
+- **📖:** [Add Contributor Covenant Code of Conduct] ([a5b37df](https://github.com/NowaraJS/elysia-jwt/commit/a5b37df))
+- **📖:** [Add contributing guidelines to the project] ([800684f](https://github.com/NowaraJS/elysia-jwt/commit/800684f))
+- **📖:** [Add security policy documentation] ([23270e6](https://github.com/NowaraJS/elysia-jwt/commit/23270e6))
+
+### 📦 Build
+
+- **📦:** [Update devDependencies and peerDependencies versions] ([ff48a67](https://github.com/NowaraJS/elysia-jwt/commit/ff48a67))
+
+### 🦉 Chore
+
+- **🦉:** [rename MIT License file with explicit .md] ([6c0c632](https://github.com/NowaraJS/elysia-jwt/commit/6c0c632))
+- **🦉:** [Update contact email in issue template] ([9d9124e](https://github.com/NowaraJS/elysia-jwt/commit/9d9124e))
+
+### ❤️ Contributors
+
+- Komiroko <komiriko@pm.me>
+
 ## v1.3.11
 
 [compare changes](https://github.com/NowaraJS/elysia-jwt/compare/v1.3.10...v1.3.11)
