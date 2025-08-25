@@ -88,7 +88,7 @@
 		}
 	},
 	"peerDependencies": {
-		"@nowarajs/error": "^1.1.7",
+		"@nowarajs/error": "^1.1.8",
 		"elysia": "^1.3.20"
 	},
 	"dependencies": {
